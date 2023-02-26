@@ -1,0 +1,16 @@
+.header ul {
+	list-style: none;
+	display: flex !important;
+	gap: 10px;
+	font-size: 20px;
+	font-weight: bold;
+}
+.header li a {
+	text-decoration: none;
+	color: coral;
+	border-bottom: 1px solid transparent;
+	transition: border 0.3s;
+}
+.header li a:hover {
+	border-bottom: 1px solid coral;
+}

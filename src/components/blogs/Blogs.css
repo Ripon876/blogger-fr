@@ -1,0 +1,28 @@
+.blog {
+	text-align: left;
+	max-width: 450px;
+	margin: 15px auto;
+}
+.blog h3 {
+	margin-bottom: 0;
+	color: coral;
+}
+.blog .author {
+	font-size: 13px;
+	margin: 0;
+}
+.blog .author span {
+	font-style: italic;
+}
+.blog .content {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+.blog .comments{
+	margin-top: 10px;
+}
+.blog .comments p {
+	margin: 5px 0;
+	font-size: 13px;
+	font-style: italic;
+}
