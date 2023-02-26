@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function User() {
+function User({ user }) {
 	return (
 		<li
 			className="p-2 my-2"
@@ -9,7 +9,7 @@ function User() {
 				boxShadow: " 4px -1px 5px #c3c3c3",
 			}}
 		>
-			<Link to="/chat?thread=sdfasad3454dsfsdddsfasd">
+			<Link to={"/chat?thread=" + user?._id}>
 				<div className="d-flex">
 					<img
 						src="https://via.placeholder.com/50x50"
@@ -18,7 +18,7 @@ function User() {
 						width="60"
 					/>
 					<div className="align-items-center d-flex pt-1">
-						<p className="fw-bold mb-0">Brad Pitt</p>
+						<p className="fw-bold mb-0">{user?.username}</p>
 					</div>
 				</div>
 			</Link>

@@ -32,6 +32,7 @@ function Login() {
 		request(process.env.REACT_APP_SERVER_URL + "/graphql", loginQuery)
 			.then((data) => {
 				localStorage.setItem("token", data.login.token);
+				localStorage.setItem("id", data.login.id);
 				setTimeout(() => {
 					navigate("/blogs");
 				}, 200);
