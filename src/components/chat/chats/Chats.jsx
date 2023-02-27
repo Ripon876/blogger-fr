@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
+import { io } from "socket.io-client";
 import { gqlClient, threadQuery, sendMsgQuery } from "../../../gqlClient";
 import Message from "./Message";
 
+let socket;
 function Chats() {
 	const queryString = window.location.search;
 	const urlParams = new URLSearchParams(queryString);
@@ -12,6 +14,27 @@ function Chats() {
 	const [thread, setThread] = useState("");
 	const [newMsg, setNewMsg] = useState("");
 	const messagesEndRef = useRef(null);
+
+	useEffect(() => {
+		socket = io("http://localhost:5000");
+
+		return () => {
+			socket.disconnect();
+		};
+	}, []);
+
+	useEffect(() => {
+		socket.on("Msg", (msg) => {
+			console.log("msg recieved");
+			// setMsgs([...msgs, msg]);
+			if (msg.thread === localStorage.getItem("thread")) {
+				setMsgs((old) => {
+					console.log(old);
+					return [...old, msg];
+				});
+			}
+		});
+	}, []);
 
 	useEffect(() => {
 		let query = threadQuery([
@@ -28,8 +51,10 @@ function Chats() {
 							(u) => u._id !== localStorage.getItem("id")
 						)
 					);
+					socket.emit("joinThread", localStorage.getItem("id"));
 					setThread(data.getThread._id);
-					setMsgs([...data.getThread.messages]);
+					localStorage.setItem("thread", data.getThread._id);
+					setMsgs(data.getThread.messages);
 				})
 				.catch((err) => {
 					console.log(err);
@@ -37,7 +62,8 @@ function Chats() {
 		}
 	}, [searchParams]);
 
-	const sendMsg = () => {
+	const sendMsg = (e) => {
+		e.preventDefault();
 		let msgQuery = sendMsgQuery({
 			from: localStorage.getItem("id"),
 			to: user._id,
@@ -49,6 +75,7 @@ function Chats() {
 			.request(msgQuery)
 			.then((data) => {
 				console.log(data);
+				console.log(msgs);
 				setMsgs([...msgs, data.createMessage]);
 				setNewMsg("");
 			})
@@ -69,7 +96,7 @@ function Chats() {
 				<div className="panel-heading">
 					<h3 className="panel-title">
 						<i className="icon wb-chat-text" aria-hidden="true"></i>{" "}
-						Chat
+						{user?.username}
 					</h3>
 				</div>
 				<div className="panel-body">
@@ -81,7 +108,7 @@ function Chats() {
 					</div>
 				</div>
 				<div className="panel-footer py-3">
-					<form>
+					<form onSubmit={sendMsg}>
 						<div className="d-flex form-group gap-2">
 							<input
 								type="text"

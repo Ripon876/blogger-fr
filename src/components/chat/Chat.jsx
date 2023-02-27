@@ -1,17 +1,14 @@
 import { useState, useEffect } from "react";
 import { gqlClient, usersQuery } from "../../gqlClient";
-import { io } from "socket.io-client";
+
 import Sidebar from "./sidebar/Sidebar";
 import Chats from "./chats/Chats";
 import "./Chat.css";
 
-let socket;
 function Chat() {
 	const [users, setUsers] = useState([]);
 
 	useEffect(() => {
-		socket = io("http://localhost:5000");
-
 		gqlClient
 			.request(usersQuery)
 			.then((data) => {

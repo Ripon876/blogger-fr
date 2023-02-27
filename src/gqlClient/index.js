@@ -27,7 +27,7 @@ const userQuery = (id) => gql`
     }
 `;
 
-const threadQuery = (ids) => gql`
+const threadQuery = (ids, socket_id) => gql`
 	mutation {
 		getThread(
 			users: ["${ids[0]}", "${ids[1]}"]
